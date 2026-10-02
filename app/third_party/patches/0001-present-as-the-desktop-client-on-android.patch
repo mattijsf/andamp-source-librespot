@@ -1,0 +1,19 @@
+diff --git a/core/src/spclient.rs b/core/src/spclient.rs
+index e9ca993..1207a0d 100644
+--- a/core/src/spclient.rs
++++ b/core/src/spclient.rs
+@@ -184,7 +184,13 @@ impl SpClient {
+         // on macOS and Windows. On Android and iOS we can send a platform-specific client ID and are
+         // then presented with a hash cash challenge. On Linux, we have to pass the old keymaster ID.
+         // We delegate most of this logic to `SessionConfig`.
+-        let os = OS;
++        // AndAmp: present as the desktop client on Android. Upstream asks for a
++        // client token under the Android client id with Android platform data,
++        // while the session and any credential minted by the device-pair flow
++        // are on the desktop id - and login5 then refuses the pair. Measured on
++        // a Pixel 9 Pro: BAD_REQUEST with a desktop session, INVALID_CREDENTIALS
++        // with an Android one. See third_party/PATCHES.md.
++        let os = if OS == "android" { "linux" } else { OS };
+         let client_id = match os {
+             "macos" | "windows" => self.session().client_id(),
+             os => SessionConfig::default_for_os(os).client_id,

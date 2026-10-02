@@ -1,0 +1,6 @@
+[submodule "app/third_party/librespot"]
+	path = app/third_party/librespot
+	url = https://github.com/librespot-org/librespot.git
+	# the build applies app/third_party/patches/ to this working tree, so it is
+	# dirty by design; the pin is what is tracked. See app/third_party/PATCHES.md.
+	ignore = dirty

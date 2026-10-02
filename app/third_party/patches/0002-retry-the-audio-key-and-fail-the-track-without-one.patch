@@ -1,0 +1,68 @@
+diff --git a/core/src/audio_key.rs b/core/src/audio_key.rs
+index 42cad43..22a0776 100644
+--- a/core/src/audio_key.rs
++++ b/core/src/audio_key.rs
+@@ -5,6 +5,7 @@ use bytes::Bytes;
+ use thiserror::Error;
+ use tokio::sync::oneshot;
+ 
++use log::warn;
+ use crate::{Error, FileId, SpotifyId, packet::PacketType, util::SeqGenerator};
+ 
+ #[derive(Debug, Hash, PartialEq, Eq, Copy, Clone)]
+@@ -79,6 +80,25 @@ impl AudioKeyManager {
+     }
+ 
+     pub async fn request(&self, track: SpotifyId, file: FileId) -> Result<AudioKey, Error> {
++        // AndAmp: ask again on a timeout. One request had one chance of 1.5s,
++        // and a key that arrives late is indistinguishable from one that never
++        // comes - so a single slow round trip lost the whole track. See
++        // third_party/PATCHES.md.
++        const ATTEMPTS: usize = 3;
++        let mut last = None;
++        for attempt in 1..=ATTEMPTS {
++            match self.request_once(track, file).await {
++                Ok(key) => return Ok(key),
++                Err(e) => {
++                    warn!("Audio key attempt {attempt} of {ATTEMPTS} failed: {e}");
++                    last = Some(e);
++                }
++            }
++        }
++        Err(last.unwrap_or_else(|| AudioKeyError::Timeout.into()))
++    }
++
++    async fn request_once(&self, track: SpotifyId, file: FileId) -> Result<AudioKey, Error> {
+         let (tx, rx) = oneshot::channel();
+ 
+         let seq = self.lock(move |inner| {
+diff --git a/playback/src/player.rs b/playback/src/player.rs
+index f3d803d..c4d7554 100644
+--- a/playback/src/player.rs
++++ b/playback/src/player.rs
+@@ -1105,14 +1105,20 @@ impl PlayerTrackLoader {
+ 
+             let stream_loader_controller = encrypted_file.get_stream_loader_controller().ok()?;
+ 
+-            // Not all audio files are encrypted. If we can't get a key, try loading the track
+-            // without decryption. If the file was encrypted after all, the decoder will fail
+-            // parsing and bail out, so we should be safe from outputting ear-piercing noise.
++            // AndAmp: fail the track rather than carrying on undecrypted.
++            //
++            // Upstream tries the file without a key on the grounds that some
++            // are not encrypted and the decoder will bail out on the rest. It
++            // does bail out - as "Symphonia Decoder Error: end of stream",
++            // which is what a key timeout then looks like to everyone
++            // downstream. Diagnosing an account that has been cut off, or a
++            // network that is merely slow, is impossible through that. See
++            // third_party/PATCHES.md.
+             let key = match self.session.audio_key().request(track_id, file_id).await {
+                 Ok(key) => Some(key),
+                 Err(e) => {
+-                    warn!("Unable to load key, continuing without decryption: {e}");
+-                    None
++                    error!("Unable to load the audio key: {e}");
++                    return None;
+                 }
+             };
+ 

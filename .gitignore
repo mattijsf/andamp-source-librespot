@@ -1,0 +1,13 @@
+.gradle/
+.kotlin/
+build/
+local.properties
+.DS_Store
+.idea/
+*.iml
+captures/
+
+# the release signing settings and keystores
+keystore.properties
+*.jks
+*.keystore

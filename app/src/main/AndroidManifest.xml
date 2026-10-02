@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The Librespot pack: a music source in its own APK.
+
+  The service answers the bind action, which is how the player finds this pack:
+  it resolves an intent, so it needs no permission to see the app list. The
+  settings activity answers the settings action, where an account is signed in.
+  Both are exported because the caller is another package.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      The pack plays no sound itself: what it decodes goes to the player through
+      a pipe, and the player renders it. So there is no foreground service, no
+      notification and no wake lock or Wi-Fi lock here.
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- ACCESS_NETWORK_STATE is merged in from the SDK, with the network watcher that needs it. -->
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AndAmpPack">
+
+        <!--
+          The pack's side of the wire. It is only ever bound: the player keeps
+          this process alive while music plays by binding with
+          BIND_INCLUDE_CAPABILITIES while it is itself in the foreground.
+        -->
+        <service
+            android:name="nl.mattix.andamp.pack.librespot.pack.PackService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="nl.mattix.andamp.source.BIND" />
+            </intent-filter>
+        </service>
+
+        <!--
+          The account screen. Always enabled: Andamp's Preferences open it, also
+          when the launcher icon is off. The icon is the alias below.
+        -->
+        <activity
+            android:name="nl.mattix.andamp.pack.librespot.ui.LibrespotSettingsActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="nl.mattix.andamp.source.SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          The icon in the app list, so the pack can be opened and signed in
+          without the player.
+
+          An alias that is disabled here and enabled by the pack the first time
+          it runs; see PackLauncherEntry in source-common. Declared enabled, it
+          could not be hidden: from Android 10 a launcher shows a disabled
+          launcher activity of an app with permissions as an "App info" icon,
+          going by what the manifest declares.
+        -->
+        <activity-alias
+            android:name="nl.mattix.andamp.pack.librespot.ui.LauncherEntry"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher"
+            android:targetActivity="nl.mattix.andamp.pack.librespot.ui.LibrespotSettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+    </application>
+
+</manifest>

@@ -1,0 +1,7 @@
+# Git hooks. One-time setup after clone: `lefthook install` (brew install lefthook)
+pre-push:
+  commands:
+    verify:
+      # `gate` is defined in the root build.gradle.kts: formatting, detekt, the
+      # unit tests and the goldens.
+      run: ./gradlew gate

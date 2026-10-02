@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      The settings activity's window: no action bar, because Compose draws its
+      own top bar. The window background shows only until Compose draws the
+      Material surface over it, light or dark.
+    -->
+    <style name="Theme.AndAmpPack" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+</resources>

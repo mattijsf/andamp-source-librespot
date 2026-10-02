@@ -1,0 +1,34 @@
+# detekt settings on top of its defaults (buildUponDefaultConfig = true). Spotless with
+# ktlint handles formatting; detekt checks code smells and complexity. There is no
+# baseline file.
+#
+# Every Andamp source uses this same file. The thresholds fit a source with a Compose
+# settings screen; a smaller source stays under them.
+
+style:
+  UnusedImports:
+    active: true # off by default
+  MaxLineLength:
+    maxLineLength: 130 # the same limit as .editorconfig
+  ReturnCount:
+    max: 3 # functions that return early when a call fails
+    excludeGuardClauses: true
+  LoopWithTooManyJumpStatements:
+    maxJumpCount: 3 # parsing loops that skip a bad entry
+
+complexity:
+  LongMethod:
+    threshold: 120 # composables that lay out a whole screen
+  CyclomaticComplexMethod:
+    threshold: 20 # settings forms with one branch per field state
+  LongParameterList:
+    # composables take their state and callbacks as parameters; backends take every
+    # collaborator a test replaces
+    functionThreshold: 11
+    constructorThreshold: 12
+  TooManyFunctions:
+    thresholdInClasses: 29 # library classes with one function per browse question
+
+naming:
+  FunctionNaming:
+    ignoreAnnotated: ["Composable"] # composables are PascalCase
