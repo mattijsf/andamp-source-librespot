@@ -1443,10 +1443,9 @@ pub extern "system" fn Java_nl_mattix_andamp_pack_librespot_LibrespotQueries_nat
 
 /// The metadata for a batch of uris, of one kind, one printed message per line.
 ///
-/// A line per entry the server answered with, in the server's order, and a line
-/// beginning `error` for one whose metadata could not be read. A uri the server
-/// leaves out has no line. Nothing here puts the lines in the order of the
-/// uris asked for.
+/// A line per entry the server answered with, in the order of the uris asked
+/// for, and a line beginning `error` for one whose metadata could not be read.
+/// A uri the server leaves out has no line.
 async fn extended_metadata<M: MessageFull>(
     session: Session,
     kind: ExtensionKind,
@@ -1454,9 +1453,9 @@ async fn extended_metadata<M: MessageFull>(
 ) -> String {
     let request = BatchedEntityRequest {
         entity_request: uris
-            .into_iter()
+            .iter()
             .map(|uri| EntityRequest {
-                entity_uri: uri,
+                entity_uri: uri.clone(),
                 query: vec![ExtensionQuery {
                     extension_kind: EnumOrUnknown::new(kind),
                     ..Default::default()
@@ -1470,19 +1469,34 @@ async fn extended_metadata<M: MessageFull>(
         Ok(batch) => batch,
         Err(why) => return format!("error {why}"),
     };
-    let mut lines: Vec<String> = Vec::new();
+    let mut answered: Vec<(String, String)> = Vec::new();
     for entity in batch.extended_metadata {
         for data in entity.extension_data {
+            let uri = data.entity_uri.clone();
             let line = data
                 .extension_data
                 .into_option()
                 .and_then(|held| M::parse_from_bytes(&held.value).ok())
                 .map(|message| printed(&message))
                 .unwrap_or_else(|| "error no metadata".into());
-            lines.push(line.replace('\n', " "));
+            answered.push((uri, line.replace('\n', " ")));
         }
     }
-    lines.join("\n")
+    in_asked_order(&uris, answered).join("\n")
+}
+
+/// The lines of a batch answer, each paired with the uri the server filed it
+/// under, put in the order of the uris [asked] for.
+///
+/// The server may answer in another order, and a row's own uri can differ from
+/// the one asked for, so the uri the server echoes is what places a line. A
+/// line under a uri that was not asked for goes after the others, in the order
+/// it came.
+fn in_asked_order(asked: &[String], answered: Vec<(String, String)>) -> Vec<String> {
+    let place = |uri: &str| asked.iter().position(|it| it == uri).unwrap_or(asked.len());
+    let mut answered = answered;
+    answered.sort_by_key(|(uri, _)| place(uri));
+    answered.into_iter().map(|(_, line)| line).collect()
 }
 
 /// [extended_metadata] for a newline-separated list of uris, as a JNI answer.
@@ -1757,6 +1771,44 @@ mod tests {
             picked_kbps(Bitrate::Bitrate160, having(&[AAC_24, FLAC_FLAC])),
             None
         );
+    }
+
+    fn asked(uris: &[&str]) -> Vec<String> {
+        uris.iter().map(|uri| uri.to_string()).collect()
+    }
+
+    fn answered(pairs: &[(&str, &str)]) -> Vec<(String, String)> {
+        pairs
+            .iter()
+            .map(|(uri, line)| (uri.to_string(), line.to_string()))
+            .collect()
+    }
+
+    #[test]
+    fn a_batch_answered_out_of_order_comes_back_in_the_order_asked() {
+        let lines = in_asked_order(
+            &asked(&["a:1", "a:2", "a:3"]),
+            answered(&[("a:3", "three"), ("a:1", "one"), ("a:2", "two")]),
+        );
+        assert_eq!(lines, vec!["one", "two", "three"]);
+    }
+
+    #[test]
+    fn a_uri_the_server_leaves_out_has_no_line_and_the_rest_keep_their_order() {
+        let lines = in_asked_order(
+            &asked(&["a:1", "a:2", "a:3"]),
+            answered(&[("a:3", "three"), ("a:1", "one")]),
+        );
+        assert_eq!(lines, vec!["one", "three"]);
+    }
+
+    #[test]
+    fn a_line_under_a_uri_not_asked_for_comes_last() {
+        let lines = in_asked_order(
+            &asked(&["a:1", "a:2"]),
+            answered(&[("b:9", "other"), ("a:2", "two"), ("a:1", "one")]),
+        );
+        assert_eq!(lines, vec!["one", "two", "other"]);
     }
 
     #[test]

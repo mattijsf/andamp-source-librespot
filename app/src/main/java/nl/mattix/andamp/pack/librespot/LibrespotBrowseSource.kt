@@ -302,11 +302,11 @@ class LibrespotBrowseSource internal constructor(
      * One batch's rows, filed under the uri each was asked for; false when the
      * batch did not come back whole.
      *
-     * When the answer has as many lines as the batch has uris, the lines are
-     * taken to be in the order asked and each row is filed by position: a row
-     * names its canonical uri, which may not be the one asked for. The engine
-     * passes on the server's order and does not guarantee this. An answer with
-     * another number of lines is filed by each row's own uri.
+     * The engine returns the lines in the order of the uris asked for. When the
+     * answer has as many lines as the batch has uris, each row is filed by
+     * position, because a row names its canonical uri, which may not be the one
+     * asked for. When the server left a uri out, the lines are fewer and each
+     * row is filed by its own uri.
      */
     private fun nameInto(
         found: MutableMap<String, LibrespotRow>,

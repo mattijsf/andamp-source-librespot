@@ -33,9 +33,8 @@ internal interface BrowseResponder {
 
     /**
      * Metadata for those uris: one JSON object per line for each track the
-     * server answered, in the server's order, and a line beginning `error` for
-     * one it could not read. The engine does not put the lines in the order of
-     * the uris asked for.
+     * server answered, in the order of the uris asked for, and a line beginning
+     * `error` for one it could not read. A uri the server leaves out has no line.
      */
     fun tracks(uris: List<String>): String
 

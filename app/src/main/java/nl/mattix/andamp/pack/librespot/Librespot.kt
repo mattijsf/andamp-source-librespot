@@ -153,9 +153,9 @@ internal object LibrespotQueries {
 
     /**
      * Metadata for a batch of track uris, one per line in and one JSON object
-     * per line out: a line per track the server answered with, in the
-     * server's order, and a line beginning `error` for one it could not read.
-     * The engine does not put the lines in the order of the uris asked for.
+     * per line out: a line per track the server answered with, in the order
+     * of the uris asked for, and a line beginning `error` for one it could not
+     * read. A uri the server leaves out has no line.
      */
     external fun nativeTracks(uris: String): String
 
