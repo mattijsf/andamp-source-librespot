@@ -13,7 +13,7 @@ librespot here and played by Andamp through its own equalizer, effects and visua
 
 ## Get it
 
-The APK is at [mattix.nl/andamp/extensions/librespot](https://mattix.nl/andamp/extensions/librespot).
+The APK is at [andamp.nl/extensions/librespot](https://andamp.nl/extensions/librespot).
 It is not on Google Play. Andamp notifies you when a newer version is available.
 
 ## Build

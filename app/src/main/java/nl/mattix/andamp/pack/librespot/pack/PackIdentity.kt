@@ -26,10 +26,10 @@ internal object PackIdentity {
     const val LABEL = "Librespot"
 
     /** Where this pack's own `update.json` is. */
-    const val UPDATES = "https://mattix.nl/andamp/extensions/librespot/update.json"
+    const val UPDATES = "https://andamp.nl/extensions/librespot/update.json"
 
     /** The page a listener gets this pack from. */
-    const val HOME = "https://mattix.nl/andamp/extensions/librespot"
+    const val HOME = "https://andamp.nl/extensions/librespot"
 
     /**
      * Everything the player reads when it binds.

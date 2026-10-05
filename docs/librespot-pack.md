@@ -10,7 +10,7 @@ This pack's music comes from a commercial streaming service, called *the service
 
 This repository builds one application (`nl.mattix.andamp.pack.librespot`, label
 "Librespot", rows under the `spotify:` scheme). It is distributed as an APK from its own
-page, <https://mattix.nl/andamp/extensions/librespot>, and is not on Google Play. The player
+page, <https://andamp.nl/extensions/librespot>, and is not on Google Play. The player
 carries none of it.
 
 ## Why librespot
