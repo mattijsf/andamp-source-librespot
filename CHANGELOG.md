@@ -2,6 +2,13 @@
 
 What changed for users of this source, newest first.
 
+## [0.6.0](https://github.com/mattijsf/andamp-source-librespot/compare/v0.5.2...v0.6.0) (2026-10-07)
+
+
+### New
+
+* a Donate row in the settings opens the ways to leave a tip on andamp.nl ([#5](https://github.com/mattijsf/andamp-source-librespot/issues/5)) ([f871406](https://github.com/mattijsf/andamp-source-librespot/commit/f871406f211049ffa17b45312a6cc5a0cddd417b))
+
 ## [0.5.2](https://github.com/mattijsf/andamp-source-librespot/compare/v0.5.1...v0.5.2) (2026-10-05)
 
 

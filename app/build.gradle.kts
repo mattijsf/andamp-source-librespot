@@ -34,7 +34,7 @@ android {
     defaultConfig {
         applicationId = "nl.mattix.andamp.pack.librespot"
         targetSdk = 36
-        versionName = "0.5.2" // x-release-please-version
+        versionName = "0.6.0" // x-release-please-version
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // arm64 for phones, x86_64 so the emulator stays usable
         ndk { abiFilters += listOf("arm64-v8a", "x86_64") }
