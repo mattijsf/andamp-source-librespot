@@ -103,6 +103,8 @@ fun LibrespotPage() {
     HowItPlays(engine)
     Spacer(Modifier.height(12.dp))
     AppListRow(appList)
+    Spacer(Modifier.height(12.dp))
+    DonateRow()
 }
 
 /** What this app is, in one line, for somebody who opened it from their app list. */
