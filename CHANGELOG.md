@@ -2,6 +2,13 @@
 
 What changed for users of this source, newest first.
 
+## [0.7.0](https://github.com/mattijsf/andamp-source-librespot/compare/v0.6.0...v0.7.0) (2026-10-14)
+
+
+### New
+
+* Android's App info page opens the source's settings ([#7](https://github.com/mattijsf/andamp-source-librespot/issues/7)) ([7682fe9](https://github.com/mattijsf/andamp-source-librespot/commit/7682fe9cbac81f7f7b361b569d25749ef27b1f66))
+
 ## [0.6.0](https://github.com/mattijsf/andamp-source-librespot/compare/v0.5.2...v0.6.0) (2026-10-07)
 
 
