@@ -50,6 +50,11 @@
                 <action android:name="nl.mattix.andamp.source.SETTINGS" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <!-- the "Additional settings in the app" button on the phone's App info page -->
+            <intent-filter>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <!--
