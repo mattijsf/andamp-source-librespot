@@ -36,6 +36,13 @@
             <intent-filter>
                 <action android:name="nl.mattix.andamp.source.BIND" />
             </intent-filter>
+            <!-- the mark Andamp shows beside this source's songs; read from here, not over the wire -->
+            <meta-data
+                android:name="nl.mattix.andamp.source.MARK"
+                android:resource="@drawable/andamp_mark" />
+            <meta-data
+                android:name="nl.mattix.andamp.source.MARK_PIXELS"
+                android:resource="@array/andamp_mark_pixels" />
         </service>
 
         <!--
