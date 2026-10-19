@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      The same mark for Andamp's pixel font, one character to a pixel: # is
+      ink. Nine rows, so the disc and its three arcs can be told apart beside
+      letters five pixels tall. Named in the manifest as
+      nl.mattix.andamp.source.MARK_PIXELS.
+    -->
+    <string-array name="andamp_mark_pixels" translatable="false">
+        <item>..#####..</item>
+        <item>.#######.</item>
+        <item>#########</item>
+        <item>##.....##</item>
+        <item>#########</item>
+        <item>##.....##</item>
+        <item>#########</item>
+        <item>.##...##.</item>
+        <item>..#####..</item>
+    </string-array>
+</resources>
