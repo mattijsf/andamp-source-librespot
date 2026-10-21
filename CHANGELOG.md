@@ -2,6 +2,18 @@
 
 What changed for users of this source, newest first.
 
+## [0.8.0](https://github.com/mattijsf/andamp-source-librespot/compare/v0.7.0...v0.8.0) (2026-10-19)
+
+
+### New
+
+* Andamp shows this source's logo beside its songs ([#9](https://github.com/mattijsf/andamp-source-librespot/issues/9)) ([7cd4080](https://github.com/mattijsf/andamp-source-librespot/commit/7cd408038d9d4533bd19476aeb9417c6cafc3178))
+
+
+### Fixed
+
+* this source's mark in Andamp's pixel font is a little lighter ([#11](https://github.com/mattijsf/andamp-source-librespot/issues/11)) ([48fe1e6](https://github.com/mattijsf/andamp-source-librespot/commit/48fe1e6340823db605f28ab4fdd54503c6485a45))
+
 ## [0.7.0](https://github.com/mattijsf/andamp-source-librespot/compare/v0.6.0...v0.7.0) (2026-10-14)
 
 
