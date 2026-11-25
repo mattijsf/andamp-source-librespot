@@ -2,6 +2,13 @@
 
 What changed for users of this source, newest first.
 
+## [0.8.1](https://github.com/mattijsf/andamp-source-librespot/compare/v0.8.0...v0.8.1) (2026-11-25)
+
+
+### Changed
+
+* the launcher icon is the source's mark with the cog, without the old ring ([#12](https://github.com/mattijsf/andamp-source-librespot/issues/12)) ([8c3b3a8](https://github.com/mattijsf/andamp-source-librespot/commit/8c3b3a829369cf3bf292ad23d78c41c7c46d8f6a))
+
 ## [0.8.0](https://github.com/mattijsf/andamp-source-librespot/compare/v0.7.0...v0.8.0) (2026-10-19)
 
 
